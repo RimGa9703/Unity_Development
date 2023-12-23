@@ -1,10 +1,13 @@
-# Unity_development
-유니티 게임 개발하면서 필요한 유틸/로직 등을 저장한 Git 입니다.
+# Util
+    개발 편의성을 위한 Unil 모음 폴더
 
+## AssetLoader.cs
+    ResourceLoad로 부른 에셋들의 재활용을 위한 스크립트
+    
+## Singletone.cs
+    디자인 패턴 Singletone을 쉽게 구현하기 위한 스크립트
 
-## Projectile
-발사체 로직 모음 폴더
-### CurvedGuideMissile.cs
-    끊임없이 곡선 추격하는 발사체 로직 
-    ps.메이플스토리 아델-크리에이션 스킬 참조
+## UnityPoolManager.cs
+    유니티 2021 버전부터 지원하는 ObjectPool을 응용하여 만든 풀매니저 스크립트
+
         
