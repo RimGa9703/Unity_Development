@@ -8,16 +8,23 @@ public class AssetLoader
 {
     public static AssetLoader Instance = null;
 
-    public Dictionary<string, Object> assetDic = null;
+    public Dictionary<string, SAssetData> assetDic = null;
+
+    public struct SAssetData
+    {
+        public System.Type type;
+        public Object asset;
+        public bool dontClear;
+    }
 
     public static void Init()
     {
         if (Instance == null)
         {
             Instance = new AssetLoader();
-            Instance.assetDic = new Dictionary<string, Object>();
+            Instance.assetDic = new Dictionary<string, SAssetData>();
         }
-        
+
     }
 
     public void Clear()
@@ -25,26 +32,35 @@ public class AssetLoader
         assetDic.Clear();
     }
 
-    public Object Load(string key, string path)
+    public T GetAsset<T>(string path, string assetName) where T : Object
     {
-        if (assetDic.ContainsKey(key))
-            return assetDic[key];
+        SAssetData data = AssetLoad(path, assetName, typeof(T));
+        return data.asset as T;
+    }
+    public SAssetData AssetLoad(string path, string assetName, System.Type _type, bool dontClear = false)
+    {
+        SAssetData data;
+        if (assetDic.ContainsKey(assetName) == true)
+            data = assetDic[assetName];
         else
         {
-            Object obj = Resources.Load<Object>(path);
-            if (obj != null)
-            {
-                assetDic.Add(key, obj);
-                return obj;
-            }
-            else
-                throw new System.Exception("Failed to load asset at path: " + path);
-            
+            data = default(SAssetData);
+            string fullpath = string.Format("{0}/{1}", path, assetName);
+
+            Object asset = Resources.Load(fullpath, _type);
+
+            if (asset == null)
+                return default(SAssetData);
+
+            data = new SAssetData();
+            data.type = _type;
+            data.asset = asset;
+            data.dontClear = dontClear;
+
+            assetDic.Add(assetName, data);
         }
+
+
+        return data;
     }
-    //TODO: 필요할 때 만들자
-    //public Object[] LoadAll(string key, string path)
-    //{
-       
-    //}
 }
