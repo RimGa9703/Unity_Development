@@ -20,6 +20,7 @@ public class UIStackWindowBase : UIWindowBase
     {
         base.Free();
     }
+    
 
     public void Update()
     {
@@ -28,7 +29,7 @@ public class UIStackWindowBase : UIWindowBase
             UIWindowBase windowBase = stackWindow.Pop();
             if(windowBase != null)
             {
-                windowBase.Free();          
+                windowBase.Close();          
             }
         }
     }

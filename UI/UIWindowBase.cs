@@ -20,14 +20,13 @@ public class UIWindowBase : MonoBehaviour
     public virtual void Close()
     {
         IsOpen = false;
-        gameObject.SetActive(true);
+        gameObject.SetActive(false);
     }
-    //Free는 close의 개념도 포함하고 있다.
     public virtual void Free()
     {
-        if(IsOpen == true)
+        if (IsOpen == true)
             Close();
-        UnityPoolManager.Instance.Release(uiName, this.gameObject);
+        UnityPoolManager.Instance.Release(gameObject);
     }
     public virtual void Refresh()
     {

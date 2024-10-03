@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Entities;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -8,6 +9,7 @@ public class UnityPoolManager : MonoBehaviour
 {
     public static UnityPoolManager Instance = null;
     public Transform managedPoolRoot = null;
+    public Transform playRoot = null;
     [SerializeField]
     Dictionary<string, IObjectPool<GameObject>> managedPool;
 
@@ -32,8 +34,8 @@ public class UnityPoolManager : MonoBehaviour
     {
         Transform child = null;
         //풀매니저 오브젝트에 자식으로서 관리되고 있는(사용되고 있지 않는 오브젝트들) 모두 제거
-        
-        foreach (IObjectPool <GameObject> item in managedPool.Values)
+
+        foreach (IObjectPool<GameObject> item in managedPool.Values)
         {
             item.Clear();
         }
@@ -43,9 +45,9 @@ public class UnityPoolManager : MonoBehaviour
     {
         IObjectPool<GameObject> pool = new ObjectPool<GameObject>(() =>
         { return CreatePool(prefab); },
-        GetPool, ReleasePool, DestroyPool, maxSize: 1);
-
-        managedPool.Add(prefab.name, pool);
+        GetPool, ReleasePool, DestroyPool, maxSize: 3);
+        string name = prefab.name;
+        managedPool.Add(name, pool);
     }
 
     #region MakePool
@@ -73,41 +75,58 @@ public class UnityPoolManager : MonoBehaviour
     #region Spawn
     public GameObject Spawn(GameObject prefab, Vector3 position, Vector3 scale, Quaternion rotation, bool active, Transform parent = null)
     {
-        if (managedPool.ContainsKey(prefab.name) == false)
+        string name = prefab.name;
+        if (managedPool.ContainsKey(name) == false)
         {
             MakePool(prefab);
         }
 
-        IObjectPool<GameObject> pool = managedPool[prefab.name];
+        IObjectPool<GameObject> pool = managedPool[name];
         GameObject clone = pool.Get();
         clone.transform.position = position;
-        clone.transform.parent = parent;
+        if (parent == null)
+            clone.transform.parent = playRoot;
+        else
+            clone.transform.parent = parent;
         clone.transform.rotation = rotation;
         clone.transform.localScale = scale;
         return clone;
     }
     public GameObject Spawn(GameObject prefab, Vector3 position, Transform parent = null)
     {
-        if (managedPool.ContainsKey(prefab.name) == false)
+        string name = prefab.name;
+        if (managedPool.ContainsKey(name) == false)
         {
             MakePool(prefab);
         }
 
-        IObjectPool<GameObject> pool = managedPool[prefab.name];
+        IObjectPool<GameObject> pool = managedPool[name];
         GameObject clone = pool.Get();
         clone.transform.position = position;
-        clone.transform.parent = parent;
+        if (parent == null)
+            clone.transform.parent = playRoot;
+        else
+            clone.transform.parent = parent;
         clone.transform.rotation = Quaternion.identity;
         return clone;
     }
+    public T Spawn<T>(GameObject prefab, Vector3 position, Transform parent = null) where T : UnityEngine.Object
+    {
+        return Spawn(prefab, position, parent).GetComponent<T>();
+    }
+
     #endregion
 
     #region Release
-    public void Release(string name,GameObject prefab)
+    public void Release(GameObject prefab)
     {
-        IObjectPool<GameObject> pool = managedPool[name];
+        IObjectPool<GameObject> pool = managedPool[prefab.name];
         pool.Release(prefab);
     }
     #endregion
 
+    string RemoveCloneName(GameObject Obj)
+    {
+        return Obj.name.Substring(0, Obj.name.Length - 7);
+    }
 }
