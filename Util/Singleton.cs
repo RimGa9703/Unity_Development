@@ -1,40 +1,32 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
+public class Singleton<T> where T : Singleton<T>, new()
 {
     private static T instance;
+    private static readonly object lockObj = new object();
 
     public static T Instance
     {
         get
         {
-            if (Instance == null)
+            if (instance == null)
             {
-                //하이라이어키에서 오브젝트 찾기
-                Instance = (T)FindObjectOfType(typeof(T));
-                //그래도 없다면 싱글톤 오브젝트 만들기 
-                if (Instance == null)
+                lock (lockObj)
                 {
-                    GameObject singletoneObj = new GameObject(typeof(T).Name, typeof(T));
-                    instance = singletoneObj.GetComponent<T>();
+                    if (instance == null)
+                    {
+                        instance = new T();
+                        instance.OnInit();
+                    }
                 }
             }
-            return Instance;
+            return instance;
         }
-        set { instance = value; }
     }
 
+    public static void Clear()
+    {
+        instance = null;
+    }
 
-    public virtual void Initialization()
-    {
-        //싱글톤 스크립트가 달린 오브젝트에 부모가 있을 경우 부모를 DontDestroyOnLoad
-        if (transform.parent != null && transform.root != null) DontDestroyOnLoad(this.transform.root.gameObject);
-        else DontDestroyOnLoad(this.gameObject);
-    }
-    public virtual void Clear()
-    {
-        Instance = null;
-    }
+    // 선택적으로 자식 클래스에서 초기화 로직을 정의할 수 있게 virtual 메서드 제공
+    protected virtual void OnInit() { }
 }
