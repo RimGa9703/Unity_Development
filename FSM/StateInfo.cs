@@ -1,5 +1,3 @@
-using Only1Games.FSM;
-using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,5 +10,5 @@ public class StateInfo
     public bool enable = true;
     //우선 순위
     public int priority = 0; 
-    public State state = null;
+    public FSM_State state = null;
 }
