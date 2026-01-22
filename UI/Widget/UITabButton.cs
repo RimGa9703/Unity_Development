@@ -1,11 +1,8 @@
-using Only1Games.Popup;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Only1Games.UI
-{
     public class UITabButton : UIButtonBase
     {
         UITabGroup group = null;
@@ -66,4 +63,3 @@ namespace Only1Games.UI
             notifyForLockAction = action;
         }
     }
-}
