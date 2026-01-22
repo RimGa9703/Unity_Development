@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "FSM/State")]
-public class State : ScriptableObject
+public class FSM_State : ScriptableObject
 {
     public bool isHold = false;
     public bool isUseUpdateCheck = true;

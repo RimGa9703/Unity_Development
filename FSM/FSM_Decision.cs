@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 //[CreateAssetMenu(menuName = "FSM/Decision")]
-public abstract class Decision : ScriptableObject
+public abstract class FSM_Decision : ScriptableObject
 {
 #if UNITY_EDITOR
     [TextArea(3, 5)]

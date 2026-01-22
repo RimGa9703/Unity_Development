@@ -1,12 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.UI;
-using System;
 using UnityEditor;
-using Only1Games.Util;
-using Unity.Collections;
-using Pathfinding;
-using UnityEngine.Events;
 using Sirenix.OdinInspector;
 
 public class StateController : MonoBehaviour
@@ -14,8 +9,8 @@ public class StateController : MonoBehaviour
     public Animator animator = null;
     int[] parameterNames = null;
 
-    [SerializeField] State currentState = null;
-    [SerializeField] State idleState = null;
+    [SerializeField] FSM_State currentState = null;
+    [SerializeField] FSM_State idleState = null;
 
     [Searchable, TitleGroup("FSM Setting/FSM"), TableList]
     public List<StateInfo> states = new List<StateInfo>();
@@ -23,7 +18,6 @@ public class StateController : MonoBehaviour
     /*
      * *
      */
-
 
     public void OnEnable()
     {
@@ -167,7 +161,8 @@ public class StateController : MonoBehaviour
             if (stateInfo.enable == false)
                 continue;
 
-            if (stateInfo.state.CheckEntry(this) == false) //조건을 만족하는가?
+            //조건을 만족하는가?
+            if (stateInfo.state.CheckEntry(this) == false) 
                 continue;
 
             /**/
@@ -177,7 +172,7 @@ public class StateController : MonoBehaviour
                 continue;
             }
 
-            /**/
+            /*우선 순위 체크*/
             if (bestStateInfo.priority < stateInfo.priority)
                 continue;
             bestStateInfo = stateInfo;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public abstract class Action : ScriptableObject
+public abstract class FSM_Action : ScriptableObject
 {
     protected StateController stateController = null;
 #if UNITY_EDITOR
