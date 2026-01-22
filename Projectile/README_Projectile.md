@@ -5,6 +5,8 @@
 ## CurvedGuideMissile.cs
     끊임없이 곡선 추격하는 발사체 로직 
     ps.메이플스토리 아델-크리에이션 스킬 참조
+![Image](https://github.com/user-attachments/assets/88499469-0c57-4f07-8120-97c10b103e48)
+    
 ### 사용법
     발사체가 되는 오브젝트에 해당 스크립트 부착 후 타겟으로 할 오브젝트를 인스펙터에서 링크걸어주면 됩니다.
 ### 변수 설명
