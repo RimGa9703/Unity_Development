@@ -42,27 +42,7 @@ public class GameItemInventory : StackableInventory<GameItem>
     {
         return GetTotalCount(code) > 0f;
     }
-    //내가 보유하고 있는 자원과 요청목록을 비교하여 부족한 만큼만 창고에서 가져오기 위함
-    public TaskDetail ApplyMaterialShortages(TaskDetail buildingProgress)
-    {
-        TaskDetail progress = new TaskDetail();
-        var keys = new List<string>(buildingProgress.requiredMaterials.Keys);
-
-        foreach (var key in keys)
-        {
-            var material = buildingProgress.requiredMaterials[key];
-            int requiredCount = material.requiredMaterialCount;
-            int currentCount = GetTotalCount(material.code);
-
-            if (currentCount < requiredCount)
-            {
-                int InsufficientCount = requiredCount - currentCount;
-                progress.requiredMaterials.Add(key, buildingProgress.requiredMaterials[key].CloneWithCount(InsufficientCount));
-            }
-        }
-        return progress;
-    }
-
+    
     public bool CanAddItem(GameItem item)
     {
         // 1. 기존 스택에 충분한 공간이 있는지 확인
@@ -131,8 +111,7 @@ public class GameItemInventory : StackableInventory<GameItem>
             remainingToTake -= takeCount;
         }
 
-        // SubItem 호출은 외부에서 직접 하므로 이 함수에서는 제거
-        // SubItem(code, count);
+         SubItem(code, count);
 
         return takenItems;
     }
