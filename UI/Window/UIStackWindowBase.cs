@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,23 +12,23 @@ public class UIStackWindowBase : UIWindowBase
     public override void Open()
     {
         base.Open();
-        
     }
 
     public override void Free()
     {
         base.Free();
     }
-    
 
     public void Update()
     {
+        if (stackWindow.Count <= 0)
+            return;
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             UIWindowBase windowBase = stackWindow.Pop();
-            if(windowBase != null)
+            if (windowBase != null)
             {
-                windowBase.Close();          
+                windowBase.Close();
             }
         }
     }
